@@ -1,18 +1,61 @@
-use std::error::Error;
-use std::fs::read_to_string;
-use std::path::Path;
+mod add;
+mod show;
 
-fn main() -> Result<(), Box<dyn Error>> {
-    let cs_config = Path::new("$HOME").join(".config").join("cheetsheet-cli.yaml");
+use std::fs::{File, read_to_string};
+use std::io::{Error, ErrorKind};
+use anyhow::{Result};
+use dirs::home_dir;
+use clap::Parser;
 
-    if cs_config.exists() {
-        serde_yaml::Deserializer::from_str(&read_to_string(cs_config)?);
-    }
+fn main() -> Result<()> {
+    Args::parse().run()?;
 
     Ok(())
 }
 
-// sudo /usr/local/mysql/support-files/mysql.server start (or restart or stop)
+
+#[derive(Parser, Debug)]
+enum Command {
+    #[command(about="Show CheatSheet")]
+    Show,
+    #[command(about="add a line to cheatsheet")]
+    Add {
+        #[arg(short, long)]
+        line: String
+    },
+
+}
+
+impl Command {
+    pub fn run(self) -> Result<()> {
+        use Command::*;
+        match self {
+            Show => show::show(),
+            Add{line} => add::add(line),
+        }
+    }
+}
+
+#[derive(Debug, Parser)]
+#[command(version, about, long_about = None,)]
+pub struct Args {
+    #[clap(subcommand)]
+    pub command: Option<Command>,
+}
+
+impl Args {
+    pub fn run(self) -> Result<()> {
+        match self.command {
+            None => {Command::Show.run()?},
+            Some(command) => command.run()?,
+        }
+        Ok(())
+    }
+}
 
 
-
+#[derive(thiserror::Error, Debug)]
+enum CS_Error {
+    #[error("please ensure $HOME environment variable is set")]
+    MissingHomeDir
+}
