@@ -3,7 +3,9 @@ use std::fs::{File, read_to_string};
 use std::io::Write;
 use anyhow::Result;
 use dirs::home_dir;
-use crate::CS_Error;
+use crate::{Config, CS_Error, Record};
+// #[macro_use] extern crate prettytable;
+use prettytable::{Table, Row, Cell};
 
 pub fn show() -> Result<()> {
 
@@ -12,37 +14,16 @@ pub fn show() -> Result<()> {
 
     if !config.exists() { File::create(&config)?; }
 
-    let content = serde_yaml::from_str(&read_to_string(&config)?)?;
+    let content: Config = serde_yaml::from_str(&read_to_string(&config)?)?;
 
-    // let rec = Record {
-    //     line: "sudo /usr/local/mysql/support-files/mysql.server start".into(),
-    //     name: "start mysql".into(),
-    //     date: "asd".into(),
-    // };
-    //
-    // let conf = Config {
-    //     data: vec![rec]
-    // };
+    let mut table = Table::new();
+    for record in content.data {
+        table.add_row(record.flatten().into());
+    }
 
-    // let a  =serde_yaml::to_string(&conf)?;
-    // let mut file = File::options().append(true).open(&config)?;
-    // file.write_all(a.as_bytes())?;
+    table.printstd();
 
+    // print!("{:?}", content.data);
 
     Ok(())
-}
-//
-
-
-#[derive(Serialize, Deserialize)]
-struct Config {
-    data: Vec<Record>
-}
-
-
-#[derive(Serialize, Deserialize)]
-struct Record {
-    line: String,
-    name: String,
-    date: String,
 }

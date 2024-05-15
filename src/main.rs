@@ -6,12 +6,32 @@ use std::io::{Error, ErrorKind};
 use anyhow::{Result};
 use dirs::home_dir;
 use clap::Parser;
+use serde::{Deserialize, Serialize};
 
 fn main() -> Result<()> {
     Args::parse().run()?;
 
     Ok(())
 }
+
+#[derive(Serialize, Deserialize, Debug)]
+struct Config {
+    data: Vec<Record>
+}
+
+
+#[derive(Serialize, Deserialize, Debug)]
+struct Record {
+    line: String,
+    name: String,
+    date: String,
+}
+impl Record {
+    pub fn flatten(&self) -> Vec<&str> {
+        vec![&self.line, &self.name, &self.date]
+    }
+}
+
 
 
 #[derive(Parser, Debug)]
