@@ -1,7 +1,9 @@
 use std::fs::File;
+use std::io::read_to_string;
 use std::path::PathBuf;
 use anyhow::Result;
 use clap::Parser;
+use dirs::home_dir;
 use rand::distributions::Alphanumeric;
 use rand::{Rng, thread_rng};
 use serde::{Deserialize, Serialize};
@@ -18,7 +20,9 @@ fn main() -> Result<()> {
 }
 
 fn check_for_config_existence(config_path: &PathBuf) -> Result<()> {
-    if !config_path.exists() {
+    if !config_path.exists() ||
+        read_to_string(File::options().read(true).open(config_path)?)?.is_empty()
+    {
         let config = File::options().create(true).write(true).open(&config_path)?;
         serde_yaml::to_writer(config, &Config::empty())?;
     }

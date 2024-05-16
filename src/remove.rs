@@ -7,11 +7,11 @@ use crate::{check_for_config_existence, Config, CsError, gen_id, get_ids, Record
 pub fn remove(id: String) -> Result<()> {
     let home_dir = home_dir().ok_or(CsError::MissingHomeDir)?; // attempt to get home env-var
     let config_path = home_dir.join(".config").join("cheatsheet-cli.yaml"); // config path
-
     check_for_config_existence(&config_path)?;
 
     let mut config: Config = serde_yaml::from_str(&read_to_string(&config_path)?)?;
     let ids = get_ids(&config)?;
+
 
     let index = ids.iter().position(|x| x == &id).ok_or(CsError::NonExistentId(id.clone()))?;
     config.data.remove(index);
@@ -21,4 +21,3 @@ pub fn remove(id: String) -> Result<()> {
 
     Ok(())
 }
-

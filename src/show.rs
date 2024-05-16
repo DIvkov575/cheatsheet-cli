@@ -20,7 +20,7 @@ pub fn show() -> Result<()> {
         println!("Empty ☹️");
     } else {
         let mut table = Table::new();
-        for record in content.data { table.add_row(row![record.name, record.line]); }
+        for record in content.data { table.add_row(row![record.id, record.name, record.line]); }
         table.printstd();
     }
 
