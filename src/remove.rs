@@ -1,13 +1,10 @@
 use std::fs::{File, read_to_string};
-use std::path::PathBuf;
+use std::process::exit;
 use anyhow::Result;
 use dirs::home_dir;
-use rand::{Rng};
-use rand::distributions::Alphanumeric;
 use crate::{check_for_config_existence, Config, CsError, gen_id, get_ids, Record};
-use crate::CsError::TooManyIDRetries;
 
-pub fn add(name: String, line: String) -> Result<()> {
+pub fn remove(id: String) -> Result<()> {
     let home_dir = home_dir().ok_or(CsError::MissingHomeDir)?; // attempt to get home env-var
     let config_path = home_dir.join(".config").join("cheatsheet-cli.yaml"); // config path
 
@@ -15,10 +12,9 @@ pub fn add(name: String, line: String) -> Result<()> {
 
     let mut config: Config = serde_yaml::from_str(&read_to_string(&config_path)?)?;
     let ids = get_ids(&config)?;
-    let id = gen_id(&ids)?;
 
-    let record = Record { id, line, name };
-    config.data.push(record);
+    let index = ids.iter().position(|x| x == &id).ok_or(CsError::NonExistentId(id.clone()))?;
+    config.data.remove(index);
 
     let file = File::options().write(true).open(&config_path)?;
     serde_yaml::to_writer(file, &config)?;
@@ -26,8 +22,3 @@ pub fn add(name: String, line: String) -> Result<()> {
     Ok(())
 }
 
-
-
-
-
-// sudo /usr/local/mysql/support-files/mysql.server
