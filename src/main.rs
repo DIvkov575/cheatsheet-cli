@@ -19,17 +19,20 @@ struct Config {
     data: Vec<Record>
 }
 
+impl Config {
+    pub fn empty() -> Self {
+        Self {
+            data: vec![]
+        }
+    }
+}
+
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Record {
+    id: String,
     line: String,
     name: String,
-    date: String,
-}
-impl Record {
-    pub fn flatten(&self) -> Vec<&str> {
-        vec![&self.line, &self.name, &self.date]
-    }
 }
 
 
@@ -41,6 +44,8 @@ enum Command {
     #[command(about="add a line to cheatsheet")]
     Add {
         #[arg(short, long)]
+        name: String,
+        #[arg(short, long)]
         line: String
     },
 
@@ -51,7 +56,7 @@ impl Command {
         use Command::*;
         match self {
             Show => show::show(),
-            Add{line} => add::add(line),
+            Add{name, line} => add::add(name, line),
         }
     }
 }
@@ -76,6 +81,8 @@ impl Args {
 
 #[derive(thiserror::Error, Debug)]
 enum CS_Error {
+    #[error("Too many consecutive id creation retry attempts")]
+    TooManyIDRetries,
     #[error("please ensure $HOME environment variable is set")]
     MissingHomeDir
 }
