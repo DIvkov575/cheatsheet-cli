@@ -63,7 +63,7 @@ impl Config {
 }
 
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 struct Record {
     id: String,
     line: String,

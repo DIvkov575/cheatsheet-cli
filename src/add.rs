@@ -4,7 +4,7 @@ use anyhow::Result;
 use dirs::home_dir;
 use rand::{Rng};
 use rand::distributions::Alphanumeric;
-use crate::{check_for_config_existence, Config, CsError, gen_id, get_ids, Record};
+use crate::{check_for_config_existence, Config, CsError, gen_id, get_ids, Record, show};
 use crate::CsError::TooManyIDRetries;
 
 pub fn add(name: String, line: String) -> Result<()> {
@@ -18,10 +18,13 @@ pub fn add(name: String, line: String) -> Result<()> {
     let id = gen_id(&ids)?;
 
     let record = Record { id, line, name };
-    config.data.push(record);
+    config.data.push(record.clone());
 
     let file = File::options().write(true).open(&config_path)?;
     serde_yaml::to_writer(file, &config)?;
+
+    println!("Success adding record");
+    show::show()?;
 
     Ok(())
 }
