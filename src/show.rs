@@ -15,7 +15,6 @@ pub fn show() -> Result<()> {
 
     let content: Config = serde_yaml::from_str(&read_to_string(&config_path)?)?;
 
-    println!("Clic - Cli Cheatsheet");
     if content.data.len() == 0 {
         println!("Empty ☹️");
     } else {
@@ -25,5 +24,11 @@ pub fn show() -> Result<()> {
     }
 
 
+    Ok(())
+}
+
+pub fn show_command() -> Result<()> {
+    println!("Clic - Cli Cheatsheet");
+    show()?;
     Ok(())
 }

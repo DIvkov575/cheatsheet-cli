@@ -23,6 +23,7 @@ pub fn add(name: String, line: String) -> Result<()> {
     let file = File::options().write(true).open(&config_path)?;
     serde_yaml::to_writer(file, &config)?;
 
+    println!("Clic - Cli Cheatsheet");
     println!("Success adding record");
     show::show()?;
 

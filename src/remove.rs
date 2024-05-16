@@ -1,5 +1,4 @@
 use std::fs::{File, read_to_string};
-use std::process::exit;
 use anyhow::Result;
 use dirs::home_dir;
 use crate::{check_for_config_existence, Config, CsError, gen_id, get_ids, Record, show};
@@ -19,6 +18,7 @@ pub fn remove(id: String) -> Result<()> {
     let file = File::options().write(true).truncate(true).open(&config_path)?;
     serde_yaml::to_writer(file, &config)?;
 
+    println!("Clic - Cli Cheatsheet");
     println!("Success removing record");
     show::show()?;
 

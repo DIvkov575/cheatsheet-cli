@@ -91,7 +91,7 @@ impl Command {
     pub fn run(self) -> Result<()> {
         use Command::*;
         match self {
-            Show => show::show(),
+            Show => show::show_command(),
             Add{name, line} => add::add(name, line),
             Remove{id} => remove::remove(id)
         }
