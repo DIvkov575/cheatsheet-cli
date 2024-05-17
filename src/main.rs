@@ -6,6 +6,7 @@ use clap::Parser;
 use dirs::home_dir;
 use rand::{Rng, thread_rng};
 use serde::{Deserialize, Serialize};
+use crate::Command::Show;
 use crate::CsError::TooManyIDRetries;
 
 mod add;
@@ -56,12 +57,14 @@ pub fn gen_id(ids: &[String]) -> Result<String> {
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Config {
+    pat: String,
     data: Vec<Record>
 }
 impl Config {
     pub fn empty() -> Self {
         Self {
-            data: vec![]
+            pat: "".to_string(),
+            data: vec![],
         }
     }
 }
@@ -75,11 +78,12 @@ struct Record {
 }
 
 
-
 #[derive(Parser, Debug)]
 pub enum Command {
     #[command(about="Show CheatSheet")]
     Show,
+    #[command(about="Create gist to cloud save config and cheatsheet")]
+    InitWeb,
     #[command(about="add a line to cheatsheet")]
     Add {
         name: String,
@@ -96,8 +100,9 @@ impl Command {
         use Command::*;
         match self {
             Show => show::show_command(),
+            InitWeb=> web_sync::init_web_sync(),
             Add{name, line} => add::add(name, line),
-            Remove{id} => remove::remove(id)
+            Remove{id} => remove::remove(id),
         }
     }
 }
