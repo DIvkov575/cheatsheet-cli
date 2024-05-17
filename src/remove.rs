@@ -1,12 +1,10 @@
 use std::fs::{File, read_to_string};
 use anyhow::Result;
 use dirs::home_dir;
-use crate::{check_for_config_existence, Config, CsError, gen_id, get_ids, Record, show};
+use crate::{get_config_path, Config, CsError, gen_id, get_ids, Record, show};
 
 pub fn remove(id: String) -> Result<()> {
-    let home_dir = home_dir().ok_or(CsError::MissingHomeDir)?; // attempt to get home env-var
-    let config_path = home_dir.join(".config").join("cheatsheet-cli.yaml"); // config path
-    check_for_config_existence(&config_path)?;
+    let config_path = get_config_path()?;
 
     let mut config: Config = serde_yaml::from_str(&read_to_string(&config_path)?)?;
     let ids = get_ids(&config)?;

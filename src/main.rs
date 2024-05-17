@@ -4,7 +4,6 @@ use std::path::PathBuf;
 use anyhow::Result;
 use clap::Parser;
 use dirs::home_dir;
-use rand::distributions::Alphanumeric;
 use rand::{Rng, thread_rng};
 use serde::{Deserialize, Serialize};
 use crate::CsError::TooManyIDRetries;
@@ -12,6 +11,7 @@ use crate::CsError::TooManyIDRetries;
 mod add;
 mod show;
 mod remove;
+mod web_sync;
 
 fn main() -> Result<()> {
     Args::parse().run()?;
@@ -19,14 +19,18 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn check_for_config_existence(config_path: &PathBuf) -> Result<()> {
+fn get_config_path() -> Result<PathBuf> {
+    let home_dir = home_dir().ok_or(CsError::MissingHomeDir)?;
+    let config_path = home_dir.join(".config").join("cheatsheet-cli.yaml");
+
     if !config_path.exists() ||
-        read_to_string(File::options().read(true).open(config_path)?)?.is_empty()
+        read_to_string(File::options().read(true).open(&config_path)?)?.is_empty()
     {
         let config = File::options().create(true).write(true).open(&config_path)?;
         serde_yaml::to_writer(config, &Config::empty())?;
     }
-    Ok(())
+
+    Ok(config_path)
 }
 
 
