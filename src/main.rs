@@ -5,6 +5,7 @@ use anyhow::Result;
 use clap::Parser;
 use dirs::home_dir;
 use rand::{Rng, thread_rng};
+use reqwest::header::USER_AGENT;
 use serde::{Deserialize, Serialize};
 use crate::Command::Show;
 use crate::CsError::TooManyIDRetries;
@@ -57,13 +58,15 @@ pub fn gen_id(ids: &[String]) -> Result<String> {
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Config {
+    gist_id: String,
     pat: String,
     data: Vec<Record>
 }
 impl Config {
     pub fn empty() -> Self {
         Self {
-            pat: "".to_string(),
+            gist_id: String::new(),
+            pat: String::new(),
             data: vec![],
         }
     }
