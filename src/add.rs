@@ -1,7 +1,8 @@
 use std::fs::{File, read_to_string};
 use anyhow::Result;
 use dirs::home_dir;
-use crate::{get_config_path, Config, CsError, gen_id, get_ids, Record, show};
+use crate::{get_config_path, config, error, gen_id, get_ids, show};
+use crate::config::{Config, Record};
 
 pub fn add(name: String, line: String) -> Result<()> {
     let config_path = get_config_path()?;

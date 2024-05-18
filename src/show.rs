@@ -3,9 +3,10 @@ use std::fs::{File, read_to_string};
 use std::io::Write;
 use anyhow::Result;
 use dirs::home_dir;
-use crate::{get_config_path, Config, CsError, Record};
+use crate::{get_config_path, config, error, };
 // #[macro_use] extern crate prettytable;
 use prettytable::{Table, Row, Cell, row};
+use crate::config::Config;
 
 pub fn show() -> Result<()> {
     let config_path = get_config_path()?;

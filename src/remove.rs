@@ -1,7 +1,9 @@
 use std::fs::{File, read_to_string};
 use anyhow::Result;
 use dirs::home_dir;
-use crate::{get_config_path, Config, CsError, gen_id, get_ids, Record, show};
+use crate::{get_config_path, config, error, gen_id, get_ids, show};
+use crate::config::Config;
+use crate::error::ClicError;
 
 pub fn remove(id: String) -> Result<()> {
     let config_path = get_config_path()?;
@@ -10,7 +12,7 @@ pub fn remove(id: String) -> Result<()> {
     let ids = get_ids(&config)?;
     let id = id.to_uppercase();
 
-    let index = ids.iter().position(|x| x == &id).ok_or(CsError::NonExistentId(id.clone()))?;
+    let index = ids.iter().position(|x| x == &id).ok_or(ClicError::NonExistentId(id.clone()))?;
     config.data.remove(index);
 
     let file = File::options().write(true).truncate(true).open(&config_path)?;
