@@ -7,5 +7,7 @@ pub enum ClicError {
     #[error("record id does not exist in clic")]
     NonExistentId(String),
     #[error("no gist id: please initialize sync w/ init-web ")]
-    NoGistId
+    NoGistId,
+    #[error("no PAT found")]
+    NoPAT
 }

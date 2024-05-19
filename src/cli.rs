@@ -20,13 +20,13 @@ pub enum Command {
 }
 
 impl Command {
-    pub fn run(self) -> Result<()> {
+    pub async fn run(self) -> Result<()> {
         use Command::*;
         match self {
-            Show => show::show_command(),
-            InitWeb=> web_sync::init_web_sync(),
-            Add{name, line} => add::add(name, line),
-            Remove{id} => remove::remove(id),
+            Show => Ok(show::show_command().await?),
+            InitWeb=> Ok(web_sync::init_web_sync().await?),
+            Add{name, line} => Ok(add::add(name, line).await?),
+            Remove{id} => Ok(remove::remove(id).await?),
         }
     }
 }
@@ -39,10 +39,10 @@ pub struct Args {
 }
 
 impl Args {
-    pub fn run(self) -> Result<()> {
+    pub async fn run(self) -> Result<()> {
         match self.command {
-            None => {Command::Show.run()?},
-            Some(command) => command.run()?,
+            None => {Command::Show.run().await?},
+            Some(command) => {command.run().await?},
         }
         Ok(())
     }

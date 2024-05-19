@@ -1,11 +1,12 @@
-use std::fs::File;
-use std::io::{BufRead, read_to_string, stdin, stdout, Write};
-use std::path::PathBuf;
+use std::io::{BufRead, stdin, stdout, Write};
+
 use anyhow::Result;
 use clap::Parser;
-use dirs::home_dir;
 use rand::{Rng, thread_rng};
 use serde::{Deserialize, Serialize};
+
+use error::ClicError;
+
 use crate::config::Config;
 
 mod error;
@@ -16,27 +17,14 @@ mod web_sync;
 mod cli;
 mod config;
 
-use error::ClicError;
-
-fn main() -> Result<()> {
-    cli::Args::parse().run()?;
+#[tokio::main]
+async fn main() -> Result<()> {
+    cli::Args::parse().run().await?;
 
     Ok(())
 }
 
-fn get_config_path() -> Result<PathBuf> {
-    let home_dir = home_dir().ok_or(ClicError::MissingHomeDir)?;
-    let config_path = home_dir.join(".config").join("cheatsheet-cli.yaml");
 
-    if !config_path.exists() ||
-        read_to_string(File::options().read(true).open(&config_path)?)?.is_empty()
-    {
-        let config = File::options().create(true).write(true).open(&config_path)?;
-        serde_yaml::to_writer(config, &Config::empty())?;
-    }
-
-    Ok(config_path)
-}
 
 
 pub fn get_ids(config: &Config) -> Result<Vec<String>> {
