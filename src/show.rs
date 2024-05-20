@@ -18,30 +18,6 @@ pub async fn show() -> Result<()> {
         config = serde_yaml::from_reader(&config_file_read)?;
     }
 
-    let local_config = serde_yaml::to_string(&config)?;
-
-    if let Ok(mut online_config) = pull().await {
-        online_config = online_config.replace("\n  ", "\n").to_string();
-        online_config = online_config[2..online_config.len()-1].to_string();
-
-        if online_config != local_config {
-            let input = get_input("local config doesnt match cloud config. Choose an option: 'pull','push','None': ")?;
-            match input.to_lowercase().replace("\n", "").as_str() {
-                "pull" => {
-                    {
-                        let mut config_file = File::options().truncate(true).write(true).open(&config_path)?;
-                        config_file.write_all(online_config.as_bytes())?;
-                    }
-                    {
-                        let config_file_read = File::options().read(true).open(&config_path)?;
-                        config = serde_yaml::from_reader(&config_file_read)?;
-                    }
-                },
-                "push" => { push().await? },
-                _ => {},
-            }
-        }
-    };
 
     if config.data.len() == 0 {
         println!("Empty ☹️");

@@ -43,7 +43,7 @@ pub async fn push() -> Result<()> {
     let config_path = get_config_path()?;
     let mut config: Config = serde_yaml::from_str(&read_to_string(&config_path)?)?;
 
-    if config.pat.is_empty() { config.pat = get_input("enter pat: ")?; }
+    if config.pat.is_empty() { return Err(ClicError::NoPAT.into()) }
     if config.gist_id.is_empty() { return Err(ClicError::NoGistId.into()) }
 
     let url = format!("https://api.github.com/gists/{}", config.gist_id);
@@ -53,7 +53,8 @@ pub async fn push() -> Result<()> {
     let body = serde_json::to_string(&_body_ast)?;
     let res= post_request(&config.pat, &url, body).await?;
 
-    if res.status().is_success() { println!("Success: {:?}\n", res.text().await?); }
+    // if res.status().is_success() { println!("Success: {:?}\n", res.text().await?); }
+    if res.status().is_success() {}
     else { println!("Error: {:?}\n", res.text().await?); };
 
     Ok(())
@@ -62,9 +63,8 @@ pub async fn push() -> Result<()> {
 pub async fn pull() -> Result<String> {
     let config_path = get_config_path()?;
     let mut config: Config = serde_yaml::from_str(&read_to_string(&config_path)?)?;
-    // if config.pat.is_empty() { config.pat = get_input("enter pat: ")?; }
-    // if config.gist_id.is_empty() { return Err(ClicError::NoGistId.into()) }
 
+    if config.gist_id.is_empty() { return Err(ClicError::NoGistId.into()) }
     if config.pat.is_empty() { return Err(ClicError::NoPAT.into()); }
 
     let url = format!("https://api.github.com/gists/{}", config.gist_id);
