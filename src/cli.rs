@@ -1,6 +1,6 @@
 use anyhow::Result;
 use clap::Parser;
-use crate::{add, remove, show, web_sync};
+use crate::{add, remove, show, web_sync, get};
 
 #[derive(Parser, Debug)]
 pub enum Command {
@@ -16,7 +16,11 @@ pub enum Command {
     #[command(about="deletes a line from cheatsheet")]
     Remove {
         id: String
-    }
+    },
+    #[command(about="get the value of an entry")]
+    Get {
+        id: String
+    },
 }
 
 impl Command {
@@ -27,6 +31,7 @@ impl Command {
             InitWeb=> Ok(web_sync::init_web_sync().await?),
             Add{name, line} => Ok(add::add(name, line).await?),
             Remove{id} => Ok(remove::remove(id).await?),
+            Get{id} => Ok(get::get(&id)?),
         }
     }
 }

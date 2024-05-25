@@ -1,7 +1,7 @@
 use std::fs::{File, read_to_string};
 
 use anyhow::Result;
-use crate::{get_ids, show};
+use crate::{get_ids, index, show};
 use crate::config::{Config, get_config_path};
 use crate::error::ClicError;
 use crate::web_sync::push;
@@ -13,9 +13,7 @@ pub async fn remove(id: String) -> Result<()> {
     let mut config: Config = serde_yaml::from_str(&read_to_string(&config_path)?)?;
 
     // remove
-    let ids = get_ids(&config)?;
-    let id = id.to_uppercase();
-    let index = ids.iter().position(|x| x == &id).ok_or(ClicError::NonExistentId(id.clone()))?;
+    let index = index(&id, &config)?;
     config.data.remove(index);
 
     // write

@@ -16,15 +16,21 @@ mod remove;
 mod web_sync;
 mod cli;
 mod config;
+mod get;
 
 #[tokio::main]
 async fn main() -> Result<()> {
     cli::Args::parse().run().await?;
-
     Ok(())
 }
 
 
+pub fn index(id: &str, config: &Config) -> Result<usize> {
+    let ids = get_ids(&config)?;
+    let id = id.to_uppercase();
+    let index = ids.iter().position(|x| x == &id).ok_or(ClicError::NonExistentId(id.clone()))?;
+    Ok(index)
+}
 
 
 pub fn get_ids(config: &Config) -> Result<Vec<String>> {
