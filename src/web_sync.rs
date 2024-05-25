@@ -1,15 +1,13 @@
 use std::fs::{File, read_to_string};
-use serde_json::{json, Map, Value};
-use std::io::{BufRead, stdin, stdout, Write};
-use std::process::exit;
+use std::io::{BufRead, Write};
+
 use anyhow::Result;
-use reqwest::header::{ACCEPT, AUTHORIZATION, CONTENT_TYPE, HeaderMap, HeaderValue, USER_AGENT};
+use reqwest::header::USER_AGENT;
 use reqwest::Response;
-use serde::Serialize;
-use crate::{error, config, get_ids, gen_id, get_input};
+use serde_json::{Map};
 use crate::config::{Config, get_config_path};
 use crate::error::ClicError;
-
+use crate::get_input;
 
 pub async fn init_web_sync() -> Result<()> {
     let config_path = get_config_path()?;
@@ -18,7 +16,7 @@ pub async fn init_web_sync() -> Result<()> {
 
     if config.pat.is_empty() { config.pat = get_input("enter pat: ")?; }
 
-    let _body_ast: Map<String, Value> = wrap_body("tmp")?;
+    let _body_ast: Map<String, serde_json::Value> = wrap_body("tmp")?;
     let body = serde_json::to_string(&_body_ast)?;
     let res= post_request(&config.pat, "https://api.github.com/gists", body).await?;
 
@@ -53,9 +51,7 @@ pub async fn push() -> Result<()> {
     let body = serde_json::to_string(&_body_ast)?;
     let res= post_request(&config.pat, &url, body).await?;
 
-    // if res.status().is_success() { println!("Success: {:?}\n", res.text().await?); }
-    if res.status().is_success() {}
-    else { println!("Error: {:?}\n", res.text().await?); };
+    if !res.status().is_success() { println!("Error: {:?}\n", res.text().await?); };
 
     Ok(())
 }
@@ -85,13 +81,13 @@ pub async fn pull() -> Result<String> {
 }
 
 
-fn wrap_body(body: &str) -> Result<Map<String, Value>>{
+fn wrap_body(body: &str) -> Result<Map<String, serde_json::Value>>{
     let body_ast = Map::from_iter([
         ("description".to_string(), "online backup for clic - cheatsheet cli config".to_string().into()),
         ("public".to_string(), "false".to_string().into()),
-        ("files".to_string(), Value::Object(Map::from_iter([
-            ("cheatsheet.yaml".to_string(), Value::Object(Map::from_iter([
-                ("content".to_string(), Value::String(body.to_string()))
+        ("files".to_string(), serde_json::Value::Object(Map::from_iter([
+            ("cheatsheet.yaml".to_string(), serde_json::Value::Object(Map::from_iter([
+                ("content".to_string(), serde_json::Value::String(body.to_string()))
             ])))
         ])))
     ]);

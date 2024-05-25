@@ -1,14 +1,8 @@
 use std::fs::File;
-use std::io::Write;
-use std::process::exit;
-use std::ptr::write;
-
 use anyhow::Result;
 use prettytable::{row, Table};
 
 use crate::config::{Config, get_config_path};
-use crate::get_input;
-use crate::web_sync::{pull, push};
 
 pub async fn show() -> Result<()> {
     let mut config: Config;

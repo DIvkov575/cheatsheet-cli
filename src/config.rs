@@ -1,7 +1,6 @@
 use std::fs::File;
 use std::io::read_to_string;
 use std::path::PathBuf;
-use anyhow::anyhow;
 use dirs::home_dir;
 use serde::{Deserialize, Serialize};
 use crate::error::ClicError;

@@ -10,7 +10,7 @@ pub async fn add(name: String, line: String) -> Result<()> {
     let mut config: Config = serde_yaml::from_str(&read_to_string(&config_path)?)?;
     let config_file = File::options().write(true).open(&config_path)?;
 
-    // add reccord
+    // add record
     let ids = get_ids(&config)?;
     let id = gen_id(&ids)?;
     let record = Record { id, line, name };
