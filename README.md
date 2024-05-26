@@ -9,4 +9,6 @@ saves to ~/.config/cheatsheet.yaml and online to a github gist
 
 `remove <record id>` # removes record w/ specified id from table and cloud. Id is automatically assigned to reccord when the reccord is addded to table.
 
-`web-init` # prompts for PAT -> creates gist + saves gist id in config
+`web-init` # prompts for pat -> creates gist + saves gist id in config
+
+`get` # prompt for id -> copies value w/ corresponding id into clipboard
