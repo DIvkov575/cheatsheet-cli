@@ -13,7 +13,7 @@ pub async fn add(name: String, line: String) -> Result<()> {
     // add record
     let ids = get_ids(&config)?;
     let id = gen_id(&ids)?;
-    let record = Record { id, line, name };
+    let record = Record { id, value: line, key: name };
     config.data.push(record.clone());
 
     // write

@@ -17,7 +17,7 @@ pub async fn show() -> Result<()> {
         println!("Empty ☹️");
     } else {
         let mut table = Table::new();
-        for record in config.data { table.add_row(row![record.id, record.name, record.line]); }
+        for record in config.data { table.add_row(row![record.id, record.key, record.value]); }
         table.printstd();
     }
 

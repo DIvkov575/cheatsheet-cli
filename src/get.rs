@@ -10,7 +10,7 @@ pub fn get(id: &str) -> Result<()> {
     let config = serde_yaml::from_reader(&config_file_read)?;
 
     let index = index(&id, &config)?;
-    let value = config.data[index].line.clone();
+    let value = config.data[index].value.clone();
 
     cli_clipboard::set_contents(value).unwrap();
 

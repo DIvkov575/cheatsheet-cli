@@ -26,8 +26,8 @@ impl Config {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Record {
     pub id: String,
-    pub line: String,
-    pub name: String,
+    pub value: String,
+    pub key: String,
 }
 
 
