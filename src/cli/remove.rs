@@ -1,10 +1,10 @@
 use std::fs::{File, read_to_string};
 
 use anyhow::Result;
-use crate::{get_ids, index, show};
+use crate::{get_ids, index};
 use crate::config::{Config, get_config_path};
 use crate::error::ClicError;
-use crate::web_sync::push;
+use crate::cli::{web_sync::push, show};
 
 pub async fn remove(id: String) -> Result<()> {
     // load

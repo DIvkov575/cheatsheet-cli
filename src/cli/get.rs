@@ -1,7 +1,6 @@
 use anyhow::Result;
 use std::fs::File;
-use prettytable::{row, Table};
-use crate::config::{Config, get_config_path};
+use crate::config::{get_config_path};
 use crate::index;
 
 pub fn get(id: &str) -> Result<()> {

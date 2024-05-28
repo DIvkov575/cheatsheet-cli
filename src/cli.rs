@@ -1,6 +1,10 @@
 use anyhow::Result;
 use clap::Parser;
-use crate::{add, remove, show, web_sync, get};
+mod add;
+mod get;
+mod remove;
+mod show;
+mod web_sync;
 
 #[derive(Parser, Debug)]
 pub enum Command {

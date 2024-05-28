@@ -1,8 +1,8 @@
 use std::fs::{File, read_to_string};
 use anyhow::Result;
-use crate::{gen_id, get_ids, show};
 use crate::config::{Config, get_config_path, Record};
-use crate::web_sync::push;
+use crate::{gen_id, get_ids};
+use crate::cli::{web_sync::push, show};
 
 pub async fn add(name: String, line: String) -> Result<()> {
     // load

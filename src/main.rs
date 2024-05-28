@@ -1,22 +1,14 @@
 use std::io::{BufRead, stdin, stdout, Write};
-
 use anyhow::Result;
 use clap::Parser;
 use rand::{Rng, thread_rng};
 use serde::{Deserialize, Serialize};
-
 use error::ClicError;
 
 use crate::config::Config;
-
 mod error;
-mod add;
-mod show;
-mod remove;
-mod web_sync;
-mod cli;
 mod config;
-mod get;
+mod cli;
 
 #[tokio::main]
 async fn main() -> Result<()> {
