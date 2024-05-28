@@ -1,4 +1,4 @@
-use std::fs::File;
+use std::fs::{File};
 use anyhow::Result;
 use prettytable::{row, Table};
 
@@ -11,7 +11,6 @@ pub async fn show() -> Result<()> {
         let config_file_read = File::options().read(true).open(&config_path)?;
         config = serde_yaml::from_reader(&config_file_read)?;
     }
-
 
     if config.data.len() == 0 {
         println!("Empty ☹️");

@@ -19,7 +19,7 @@ pub enum Command {
     },
     #[command(about="deletes a line from cheatsheet")]
     Remove {
-        id: String
+        id: Vec<String>
     },
     #[command(about="get the value of an entry")]
     Get {
@@ -34,7 +34,7 @@ impl Command {
             Show => Ok(show::show_command().await?),
             InitWeb=> Ok(web_sync::init_web_sync().await?),
             Add{name, line} => Ok(add::add(name, line).await?),
-            Remove{id} => Ok(remove::remove(id).await?),
+            Remove{id} => Ok(remove::remove(&id).await?),
             Get{id} => Ok(get::get(&id)?),
         }
     }
