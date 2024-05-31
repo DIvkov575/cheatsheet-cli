@@ -16,20 +16,28 @@ async fn main() -> Result<()> {
     Ok(())
 }
 
-
-pub fn index(id: &str, config: &Config) -> Result<usize> {
-    let ids = get_ids(&config)?;
-    let id = id.to_uppercase();
-    let index = ids.iter().position(|x| x == &id).ok_or(ClicError::NonExistentId(id.clone()))?;
+pub fn index_keys(key: &str, config: &Config) -> Result<usize> {
+    let mut keys: Vec<String> = Vec::with_capacity(config.data.len());
+    for record in &config.data { keys.push(record.key.clone()) }
+    let index = keys.iter()
+        .position(|x| &x.to_uppercase() == key)
+        .ok_or(ClicError::NonExistentKey(key.to_uppercase().clone()))?;
     Ok(index)
 }
 
+pub fn index_ids(id: &str, config: &Config) -> Result<usize> {
+    let ids = get_ids(&config)?;
+    let index = ids.iter().position(|x| x == &id).ok_or(ClicError::NonExistentId(id.to_string()))?;
+    Ok(index)
+}
 
 pub fn get_ids(config: &Config) -> Result<Vec<String>> {
     let mut ids: Vec<String> = Vec::with_capacity(config.data.len());
     for record in &config.data { ids.push(record.id.clone()) }
     Ok(ids)
 }
+
+
 
 pub fn gen_id(ids: &[String]) -> Result<String> {
     let mut id: String;

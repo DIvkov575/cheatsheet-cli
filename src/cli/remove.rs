@@ -1,7 +1,7 @@
 use std::fs::{File, read_to_string};
 
 use anyhow::Result;
-use crate::{index};
+use crate::{index_ids};
 use crate::config::{Config, get_config_path};
 use crate::cli::{web_sync::push, show};
 
@@ -13,7 +13,7 @@ pub async fn remove(ids: &[String]) -> Result<()> {
 
     println!("Clic - Cli Cheatsheet");
     for id in ids {
-        let index = index(&id, &config)?;
+        let index = index_ids(&id, &config)?;
         config.data.remove(index);
         println!("Success removing record {id}");
     }
