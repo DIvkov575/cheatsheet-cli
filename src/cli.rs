@@ -37,7 +37,7 @@ pub enum Command {
         new_key: String,
     },
     #[command(about="update the value of an record")]
-    UpdateVal {
+    UpdateValue {
         id: String,
         new_value: String,
     },
@@ -54,7 +54,7 @@ impl Command {
             Get{id} => Ok(get::get(&id)?),
             UpdateID {id, new_id} => Ok(update::update_id(&id, &new_id).await?),
             UpdateKey{id, new_key} => Ok(update::update_key(&id, &new_key).await?),
-            UpdateVal {id, new_value} => Ok(update::update_val(&id, &new_value)?),
+            UpdateValue {id, new_value} => Ok(update::update_val(&id, &new_value).await?),
         }
     }
 }
