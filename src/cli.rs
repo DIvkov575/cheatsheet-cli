@@ -53,7 +53,7 @@ impl Command {
             Remove{id} => Ok(remove::remove(&id).await?),
             Get{id} => Ok(get::get(&id)?),
             UpdateID {id, new_id} => Ok(update::update_id(&id, &new_id).await?),
-            UpdateKey{id, new_key} => Ok(update::update_key(&id, &new_key)?),
+            UpdateKey{id, new_key} => Ok(update::update_key(&id, &new_key).await?),
             UpdateVal {id, new_value} => Ok(update::update_val(&id, &new_value)?),
         }
     }
