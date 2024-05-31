@@ -5,6 +5,7 @@ mod get;
 mod remove;
 mod show;
 mod web_sync;
+mod update;
 
 #[derive(Parser, Debug)]
 pub enum Command {
@@ -21,9 +22,24 @@ pub enum Command {
     Remove {
         id: Vec<String>
     },
-    #[command(about="get the value of an entry")]
+    #[command(about="get the value of an record")]
     Get {
         id: String
+    },
+    #[command(about="update the id of an record")]
+    UpdateID {
+        id: String,
+        new_id: String,
+    },
+    #[command(about="update the key of an record")]
+    UpdateKey {
+        id: String,
+        new_key: String,
+    },
+    #[command(about="update the value of an record")]
+    UpdateVal {
+        id: String,
+        new_value: String,
     },
 }
 
@@ -36,6 +52,9 @@ impl Command {
             Add{name, line} => Ok(add::add(name, line).await?),
             Remove{id} => Ok(remove::remove(&id).await?),
             Get{id} => Ok(get::get(&id)?),
+            UpdateID {id, new_id} => Ok(update::update_id(&id, &new_id).await?),
+            UpdateKey{id, new_key} => Ok(update::update_key(&id, &new_key)?),
+            UpdateVal {id, new_value} => Ok(update::update_val(&id, &new_value)?),
         }
     }
 }

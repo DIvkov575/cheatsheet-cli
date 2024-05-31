@@ -1,5 +1,7 @@
 #[derive(thiserror::Error, Debug)]
 pub enum ClicError {
+    #[error("User input invalid, please ensure input id len < 4")]
+    InvalidInput,
     #[error("Too many consecutive id creation retry attempts")]
     TooManyIDRetries,
     #[error("please ensure $HOME environment variable is set")]
