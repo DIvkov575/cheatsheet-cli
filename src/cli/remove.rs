@@ -13,7 +13,7 @@ pub async fn remove(ids: &[String]) -> Result<()> {
 
     println!("Clic - Cli Cheatsheet");
     for id in ids {
-        let index = index_ids(&id, &config)?;
+        let index = index_ids(&id.to_uppercase(), &config)?;
         config.data.remove(index);
         println!("Success removing record {id}");
     }

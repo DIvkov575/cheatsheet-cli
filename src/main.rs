@@ -27,7 +27,7 @@ pub fn index_keys(key: &str, config: &Config) -> Result<usize> {
 
 pub fn index_ids(id: &str, config: &Config) -> Result<usize> {
     let ids = get_ids(&config)?;
-    let index = ids.iter().position(|x| x == &id).ok_or(ClicError::NonExistentId(id.to_string()))?;
+    let index = ids.iter().position(|x| x == &id).ok_or(ClicError::IdNotFound)?;
     Ok(index)
 }
 

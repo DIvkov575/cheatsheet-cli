@@ -8,8 +8,8 @@ pub enum ClicError {
     MissingHomeDir,
     #[error("record key does not exist in clic")]
     NonExistentKey(String),
-    #[error("no gist id: please initialize sync w/ init-web ")]
-    NonExistentId(String),
+    #[error("id not found while indexing")]
+    IdNotFound,
     #[error("no gist id: please initialize sync w/ init-web ")]
     NoGistId,
     #[error("no PAT found")]

@@ -6,6 +6,7 @@ mod remove;
 mod show;
 mod web_sync;
 mod update;
+mod run;
 
 #[derive(Parser, Debug)]
 pub enum Command {
@@ -41,6 +42,10 @@ pub enum Command {
         id: String,
         new_value: String,
     },
+    #[command(about="execute the value stored in record as command")]
+    Run {
+        id: String
+    }
 }
 
 impl Command {
@@ -52,6 +57,7 @@ impl Command {
             Add{name, line} => Ok(add::add(name, line).await?),
             Remove{id} => Ok(remove::remove(&id).await?),
             Get{id} => Ok(get::get(&id)?),
+            Run{id} => Ok(run::run(&id)?),
             UpdateID {id, new_id} => Ok(update::update_id(&id, &new_id).await?),
             UpdateKey{id, new_key} => Ok(update::update_key(&id, &new_key).await?),
             UpdateValue {id, new_value} => Ok(update::update_val(&id, &new_value).await?),
